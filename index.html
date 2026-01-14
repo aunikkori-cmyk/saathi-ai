@@ -1,12 +1,13 @@
 <script>
 async function send() {
-  const input = document.getElementById("msg");
-  const out = document.getElementById("out");
+  const input = document.getElementById("input");
+  const out = document.getElementById("output");
   const text = input.value.trim();
   if (!text) return;
 
   out.innerText += `You: ${text}\n`;
   out.innerText += `Saathi AI: thinking...\n`;
+  input.value = "";
 
   try {
     const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
@@ -21,14 +22,14 @@ async function send() {
 
     if (data.reply) {
       out.innerText += `Saathi AI: ${data.reply}\n\n`;
+    } else if (data.error) {
+      out.innerText += `Saathi AI: ${data.error}\n\n`;
     } else {
-      out.innerText += `Saathi AI: No reply field found\n\n`;
+      out.innerText += `Saathi AI: Empty response\n\n`;
     }
 
   } catch (e) {
-    out.innerText += `Saathi AI: Error connecting to server\n\n`;
+    out.innerText += `Saathi AI: Network error\n\n`;
   }
-
-  input.value = "";
 }
 </script>
