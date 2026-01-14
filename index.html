@@ -1,69 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Saathi AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
     }
     input {
-      width: 75%;
-      padding: 10px;
-      font-size: 16px;
+      width: 70%;
+      padding: 8px;
     }
     button {
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
+      padding: 8px 12px;
+      margin-left: 5px;
     }
     pre {
-      margin-top: 15px;
       background: #f2f2f2;
       padding: 10px;
+      margin-top: 15px;
       white-space: pre-wrap;
     }
   </style>
 </head>
-
 <body>
 
-  <h2>Saathi AI</h2>
+<h1>Saathi AI</h1>
 
-  <input id="msg" placeholder="Type your message..." />
-  <button onclick="send()">Send</button>
+<input id="msg" placeholder="Type message" />
+<button onclick="send()">Send</button>
 
-  <pre id="out"></pre>
+<pre id="out"></pre>
 
-  <script>
-    async function send() {
-      const input = document.getElementById("msg");
-      const output = document.getElementById("out");
-      const text = input.value.trim();
+<script>
+async function send() {
+  const text = document.getElementById("msg").value;
+  if (!text) return;
 
-      if (!text) return;
+  const out = document.getElementById("out");
+  out.innerText = "You: " + text + "\n\nSaathi AI: thinking...";
 
-      output.innerText = "You: " + text + "\n\nSaathi AI: thinking...";
-
-      try {
-        const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-        output.innerText = "You: " + text + "\n\nSaathi AI: " + data.reply;
-
-      } catch (err) {
-        output.innerText = "Error: Failed to connect to Saathi AI";
+  try {
+    const res = await fetch(
+      "https://saathi-ai.aunikkori.workers.dev",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: text })
       }
-    }
-  </script>
+    );
+
+    const data = await res.json();
+    out.innerText = "You: " + text + "\n\nSaathi AI: " + data.reply;
+
+  } catch (e) {
+    out.innerText = "❌ Error: Failed to connect to Saathi AI";
+  }
+}
+</script>
 
 </body>
 </html>
