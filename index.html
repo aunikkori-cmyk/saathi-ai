@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Saathi AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
     }
     input {
-      width: 70%;
-      padding: 8px;
+      width: 75%;
+      padding: 10px;
+      font-size: 16px;
     }
     button {
-      padding: 8px 12px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
     }
     pre {
       margin-top: 15px;
-      background: #f4f4f4;
+      background: #f2f2f2;
       padding: 10px;
       white-space: pre-wrap;
     }
@@ -26,41 +30,40 @@
 
 <body>
 
-<h1>Saathi AI</h1>
+  <h2>Saathi AI</h2>
 
-<input id="msg" placeholder="Type message here" />
-<button onclick="send()">Send</button>
+  <input id="msg" placeholder="Type your message..." />
+  <button onclick="send()">Send</button>
 
-<pre id="out"></pre>
+  <pre id="out"></pre>
 
-<script>
-async function send() {
-  const text = document.getElementById("msg").value;
-  if (!text) return;
+  <script>
+    async function send() {
+      const input = document.getElementById("msg");
+      const output = document.getElementById("out");
+      const text = input.value.trim();
 
-  document.getElementById("out").innerText =
-    "You: " + text + "\n\nSaathi AI: thinking...";
+      if (!text) return;
 
-  try {
-    const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message: text })
-    });
+      output.innerText = "You: " + text + "\n\nSaathi AI: thinking...";
 
-    const data = await res.json();
+      try {
+        const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: text })
+        });
 
-    document.getElementById("out").innerText =
-      "You: " + text + "\n\nSaathi AI: " + data.reply;
+        const data = await res.json();
+        output.innerText = "You: " + text + "\n\nSaathi AI: " + data.reply;
 
-  } catch (e) {
-    document.getElementById("out").innerText =
-      "Error: " + e.message;
-  }
-}
-</script>
+      } catch (err) {
+        output.innerText = "Error: Failed to connect to Saathi AI";
+      }
+    }
+  </script>
 
 </body>
 </html>
