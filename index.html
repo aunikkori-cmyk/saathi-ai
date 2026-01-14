@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Saathi AI</title>
   <style>
     body {
@@ -19,7 +19,7 @@
     pre {
       background: #f2f2f2;
       padding: 10px;
-      margin-top: 15px;
+      margin-top: 10px;
       white-space: pre-wrap;
     }
   </style>
@@ -28,7 +28,7 @@
 
 <h1>Saathi AI</h1>
 
-<input id="msg" placeholder="Type message" />
+<input id="msg" placeholder="Type message">
 <button onclick="send()">Send</button>
 
 <pre id="out"></pre>
@@ -36,28 +36,28 @@
 <script>
 async function send() {
   const text = document.getElementById("msg").value;
+  const out = document.getElementById("out");
+
   if (!text) return;
 
-  const out = document.getElementById("out");
-  out.innerText = "You: " + text + "\n\nSaathi AI: thinking...";
+  out.innerText = "You: " + text + "\nSaathi AI: thinking...";
 
   try {
-    const res = await fetch(
-      "https://saathi-ai.aunikkori.workers.dev",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: text })
-      }
-    );
+    const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: text })
+    });
 
     const data = await res.json();
-    out.innerText = "You: " + text + "\n\nSaathi AI: " + data.reply;
+
+    // 🔥 YAHI FIX HAI
+    out.innerText = "You: " + text + "\nSaathi AI: " + data.reply;
 
   } catch (e) {
-    out.innerText = "❌ Error: Failed to connect to Saathi AI";
+    out.innerText = "Error: Failed to connect to Saathi AI";
   }
 }
 </script>
