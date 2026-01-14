@@ -1,26 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Saathi AI</title>
-</head>
-<body>
-
-<h1>Saathi AI</h1>
-
-<input id="msg" placeholder="Type message">
-<button onclick="send()">Send</button>
-
-<pre id="out"></pre>
-
 <script>
 async function send() {
   const text = document.getElementById("msg").value;
   if (!text) return;
 
-  document.getElementById("out").innerText = "You: " + text;
+  document.getElementById("out").innerText = "You: " + text + "\n\nSaathi AI: thinking...";
+
+  try {
+    const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await res.json();
+    document.getElementById("out").innerText =
+      "You: " + text + "\n\nSaathi AI: " + data.reply;
+
+  } catch (err) {
+    document.getElementById("out").innerText =
+      "Error: " + err.message;
+  }
 }
 </script>
-
-</body>
-</html>
