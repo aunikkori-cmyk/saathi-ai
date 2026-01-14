@@ -1,29 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Saathi AI</title>
-</head>
-<body>
-  <h1>Saathi AI</h1>
+<script>
+async function send() {
+  const text = document.getElementById("msg").value;
+  if (!text) return;
 
-  <input id="msg" placeholder="Type message">
-  <button onclick="send()">Send</button>
+  document.getElementById("out").innerText = "Thinking...";
 
-  <pre id="out"></pre>
+  try {
+    const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: text
+      })
+    });
 
-  <script>
-    async function send() {
-      const text = document.getElementById("msg").value;
-      const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await res.json();
-      document.getElementById("out").textContent =
-        JSON.stringify(data, null, 2);
-    }
-  </script>
-</body>
-</html>
+    const data = await res.text();
+    document.getElementById("out").innerText = data;
+
+  } catch (e) {
+    document.getElementById("out").innerText = "Error connecting to Saathi AI";
+  }
+}
+</script>
