@@ -4,30 +4,17 @@
   <meta charset="UTF-8">
   <title>Saathi AI</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    input {
-      width: 70%;
-      padding: 8px;
-    }
-    button {
-      padding: 8px 12px;
-    }
-    #chat {
-      margin-top: 20px;
-      background: #f2f2f2;
-      padding: 10px;
-      white-space: pre-wrap;
-    }
+    body { font-family: Arial; padding: 20px; }
+    input { width: 70%; padding: 8px; }
+    button { padding: 8px 12px; }
+    #chat { margin-top: 15px; white-space: pre-wrap; }
   </style>
 </head>
 <body>
 
 <h2>Saathi AI</h2>
 
-<input id="msg" placeholder="Type your message" />
+<input id="msg" placeholder="Type your message..." />
 <button onclick="send()">Send</button>
 
 <div id="chat"></div>
@@ -37,7 +24,8 @@ async function send() {
   const msg = document.getElementById("msg").value;
   const chat = document.getElementById("chat");
 
-  chat.innerText = "Saathi AI: thinking...";
+  chat.innerText += "\nYou: " + msg;
+  chat.innerText += "\nSaathi AI: thinking...\n";
 
   try {
     const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
@@ -45,16 +33,13 @@ async function send() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        message: msg
-      })
+      body: JSON.stringify({ message: msg })
     });
 
     const data = await res.json();
-    chat.innerText = "Saathi AI: " + data.reply;
-
+    chat.innerText += "Saathi AI: " + data.reply + "\n";
   } catch (e) {
-    chat.innerText = "Error: Failed to connect to Saathi AI";
+    chat.innerText += "❌ Error connecting to AI\n";
   }
 }
 </script>
