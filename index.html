@@ -14,33 +14,30 @@
     }
     button {
       padding: 8px 12px;
-      margin-left: 5px;
     }
-    pre {
+    #chat {
+      margin-top: 20px;
       background: #f2f2f2;
       padding: 10px;
-      margin-top: 10px;
       white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
 
-<h1>Saathi AI</h1>
+<h2>Saathi AI</h2>
 
-<input id="msg" placeholder="Type message">
+<input id="msg" placeholder="Type your message" />
 <button onclick="send()">Send</button>
 
-<pre id="out"></pre>
+<div id="chat"></div>
 
 <script>
 async function send() {
-  const text = document.getElementById("msg").value;
-  const out = document.getElementById("out");
+  const msg = document.getElementById("msg").value;
+  const chat = document.getElementById("chat");
 
-  if (!text) return;
-
-  out.innerText = "You: " + text + "\nSaathi AI: thinking...";
+  chat.innerText = "Saathi AI: thinking...";
 
   try {
     const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
@@ -48,16 +45,16 @@ async function send() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ message: text })
+      body: JSON.stringify({
+        message: msg
+      })
     });
 
     const data = await res.json();
-
-    // 🔥 YAHI FIX HAI
-    out.innerText = "You: " + text + "\nSaathi AI: " + data.reply;
+    chat.innerText = "Saathi AI: " + data.reply;
 
   } catch (e) {
-    out.innerText = "Error: Failed to connect to Saathi AI";
+    chat.innerText = "Error: Failed to connect to Saathi AI";
   }
 }
 </script>
