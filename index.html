@@ -5,7 +5,29 @@
   <title>Saathi AI</title>
 </head>
 <body>
-  <h1>Saathi AI is Live ✅</h1>
-  <p>If you see this, GitHub Pages is working.</p>
+
+<h2>Saathi AI</h2>
+<input id="msg" placeholder="Type here" />
+<button onclick="send()">Send</button>
+<pre id="out"></pre>
+
+<script>
+async function send() {
+  const msg = document.getElementById("msg").value;
+
+  const res = await fetch(
+    "https://saathi-ai.aunikkori.workers.dev",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    }
+  );
+
+  const data = await res.json();
+  document.getElementById("out").innerText = data.reply;
+}
+</script>
+
 </body>
 </html>
