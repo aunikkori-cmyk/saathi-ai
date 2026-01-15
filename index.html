@@ -1,74 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Saathi AI</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    input {
-      width: 80%;
-      padding: 8px;
-    }
-    button {
-      padding: 8px 12px;
-      margin-left: 5px;
-    }
-    pre {
-      background: #f4f4f4;
-      padding: 10px;
-      margin-top: 15px;
-      white-space: pre-wrap;
-    }
-  </style>
-</head>
-
 <body>
+<h2>Saathi AI</h2>
 
-  <h2>Saathi AI</h2>
+<input id="msg" placeholder="Type here">
+<button onclick="send()">Send</button>
 
-  <input id="input" placeholder="Type your message" />
-  <button onclick="send()">Send</button>
+<pre id="out"></pre>
 
-  <pre id="output"></pre>
+<script>
+async function send() {
+  const text = msg.value;
 
-  <script>
-    async function send() {
-      const input = document.getElementById("input");
-      const out = document.getElementById("output");
-      const text = input.value.trim();
-      if (!text) return;
+  out.innerText += "You: " + text + "\n";
+  out.innerText += "Saathi: thinking...\n";
 
-      out.innerText += `You: ${text}\n`;
-      out.innerText += `Saathi AI: thinking...\n`;
-      input.value = "";
+  const res = await fetch("PASTE_WORKER_URL_HERE", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: text })
+  });
 
-      try {
-        const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-
-        if (data.reply) {
-          out.innerText += `Saathi AI: ${data.reply}\n\n`;
-        } else if (data.error) {
-          out.innerText += `Saathi AI: ${data.error}\n\n`;
-        } else {
-          out.innerText += `Saathi AI: Empty response\n\n`;
-        }
-
-      } catch (e) {
-        out.innerText += `Saathi AI: Network error\n\n`;
-      }
-    }
-  </script>
+  const data = await res.json();
+  out.innerText += "Saathi: " + data.reply + "\n\n";
+}
+</script>
 
 </body>
 </html>
