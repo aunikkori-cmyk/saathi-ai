@@ -1,30 +1,31 @@
-<!DOCTYPE html>
-<html>
-<body>
-<h2>Saathi AI</h2>
-
-<input id="msg" placeholder="Type here">
-<button onclick="send()">Send</button>
-
-<pre id="out"></pre>
-
 <script>
 async function send() {
-  const text = msg.value;
+  const input = document.getElementById("msg");
+  const out = document.getElementById("out");
+
+  const text = input.value.trim();
+  if (!text) return;
 
   out.innerText += "You: " + text + "\n";
   out.innerText += "Saathi: thinking...\n";
 
-  const res = await fetch("PASTE_WORKER_URL_HERE", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: text })
-  });
+  try {
+    const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: text })
+    });
 
-  const data = await res.json();
-  out.innerText += "Saathi: " + data.reply + "\n\n";
+    const data = await res.json();
+
+    out.innerText += "Saathi: " + data.reply + "\n\n";
+
+  } catch (err) {
+    out.innerText += "Saathi ERROR: " + err.message + "\n\n";
+  }
+
+  input.value = "";
 }
 </script>
-
-</body>
-</html>
