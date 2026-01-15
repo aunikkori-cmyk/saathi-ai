@@ -5,44 +5,7 @@
   <title>Saathi AI</title>
 </head>
 <body>
-
-  <h1>Saathi AI</h1>
-
-  <input id="msg" placeholder="Type message here">
-  <button onclick="send()">Send</button>
-
-  <pre id="out"></pre>
-
-  <script>
-    async function send() {
-      const input = document.getElementById("msg");
-      const out = document.getElementById("out");
-
-      const text = input.value.trim();
-      if (!text) return;
-
-      out.innerText += "You: " + text + "\n";
-      out.innerText += "Saathi: thinking...\n";
-
-      try {
-        const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-
-        out.innerText += "Saathi: " + data.reply + "\n\n";
-      } catch (err) {
-        out.innerText += "ERROR: " + err.message + "\n\n";
-      }
-
-      input.value = "";
-    }
-  </script>
-
+  <h1>Saathi AI is Live ✅</h1>
+  <p>If you see this, GitHub Pages is working.</p>
 </body>
 </html>
