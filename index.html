@@ -11,25 +11,33 @@
 <input id="msg" placeholder="Type here" />
 <button id="sendBtn">Send</button>
 
-<pre id="out"></pre>
+<pre id="out">Waiting for reply...</pre>
 
 <script>
-document.getElementById("sendBtn").onclick = async function () {
-
+document.getElementById("sendBtn").addEventListener("click", async () => {
   const msg = document.getElementById("msg").value;
+  document.getElementById("out").innerText = "Thinking...";
 
-  const res = await fetch(
-    "https://saathi-ai.aunikkori.workers.dev",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: msg })
-    }
-  );
+  try {
+    const res = await fetch(
+      "https://saathi-ai.aunikkori.workers.dev",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: msg })
+      }
+    );
 
-  const data = await res.json();
-  document.getElementById("out").innerText = data.reply;
-};
+    const data = await res.json();
+    document.getElementById("out").innerText = data.reply;
+
+  } catch (err) {
+    document.getElementById("out").innerText =
+      "Error: " + err.message;
+  }
+});
 </script>
 
 </body>
