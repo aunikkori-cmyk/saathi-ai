@@ -11,33 +11,33 @@
 <input id="msg" placeholder="Type here" />
 <button id="sendBtn">Send</button>
 
-<pre id="out">Waiting for reply...</pre>
+<pre id="out">Ready.</pre>
 
 <script>
-document.getElementById("sendBtn").addEventListener("click", async () => {
-  const msg = document.getElementById("msg").value;
-  document.getElementById("out").innerText = "Thinking...";
+const btn = document.getElementById("sendBtn");
+const out = document.getElementById("out");
 
-  try {
-    const res = await fetch(
-      "https://saathi-ai.aunikkori.workers.dev",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: msg })
-      }
-    );
+btn.onclick = function () {
+  out.innerText = "Button clicked. Sending request...";
 
-    const data = await res.json();
-    document.getElementById("out").innerText = data.reply;
-
-  } catch (err) {
-    document.getElementById("out").innerText =
-      "Error: " + err.message;
-  }
-});
+  fetch("https://saathi-ai.aunikkori.workers.dev", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message: document.getElementById("msg").value })
+  })
+  .then(res => {
+    out.innerText = "Response received. Parsing...";
+    return res.json();
+  })
+  .then(data => {
+    out.innerText = data.reply;
+  })
+  .catch(err => {
+    out.innerText = "FETCH ERROR: " + err;
+  });
+};
 </script>
 
 </body>
