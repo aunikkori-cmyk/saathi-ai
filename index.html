@@ -7,12 +7,15 @@
 <body>
 
 <h2>Saathi AI</h2>
+
 <input id="msg" placeholder="Type here" />
-<button onclick="send()">Send</button>
+<button id="sendBtn">Send</button>
 <pre id="out"></pre>
 
 <script>
-async function send() {
+document.getElementById("sendBtn").onclick = async function () {
+  alert("Button Clicked"); // TEST LINE
+
   const msg = document.getElementById("msg").value;
 
   const res = await fetch(
@@ -26,7 +29,7 @@ async function send() {
 
   const data = await res.json();
   document.getElementById("out").innerText = data.reply;
-}
+};
 </script>
 
 </body>
