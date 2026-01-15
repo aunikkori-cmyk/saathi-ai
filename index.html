@@ -1,31 +1,48 @@
-<script>
-async function send() {
-  const input = document.getElementById("msg");
-  const out = document.getElementById("out");
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Saathi AI</title>
+</head>
+<body>
 
-  const text = input.value.trim();
-  if (!text) return;
+  <h1>Saathi AI</h1>
 
-  out.innerText += "You: " + text + "\n";
-  out.innerText += "Saathi: thinking...\n";
+  <input id="msg" placeholder="Type message here">
+  <button onclick="send()">Send</button>
 
-  try {
-    const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message: text })
-    });
+  <pre id="out"></pre>
 
-    const data = await res.json();
+  <script>
+    async function send() {
+      const input = document.getElementById("msg");
+      const out = document.getElementById("out");
 
-    out.innerText += "Saathi: " + data.reply + "\n\n";
+      const text = input.value.trim();
+      if (!text) return;
 
-  } catch (err) {
-    out.innerText += "Saathi ERROR: " + err.message + "\n\n";
-  }
+      out.innerText += "You: " + text + "\n";
+      out.innerText += "Saathi: thinking...\n";
 
-  input.value = "";
-}
-</script>
+      try {
+        const res = await fetch("https://saathi-ai.aunikkori.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+
+        out.innerText += "Saathi: " + data.reply + "\n\n";
+      } catch (err) {
+        out.innerText += "ERROR: " + err.message + "\n\n";
+      }
+
+      input.value = "";
+    }
+  </script>
+
+</body>
+</html>
